@@ -19,5 +19,6 @@ namespace xadrez_console.tabuleiro
                 + ", "
                 + coluna;
         }
+
     }
 }

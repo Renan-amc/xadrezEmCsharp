@@ -42,6 +42,18 @@ namespace xadrez_console.tabuleiro
         }
 
 
+        public Peca retirarPeca(Posicao pos)
+        {
+            if(peca(pos) == null)
+            {
+                return null;
+            }
+            Peca aux = peca(pos);
+            aux.posicao = null;
+            pecas[pos.linha, pos.coluna] = null;
+            return aux;
+        }
+
         //Se a posição que eu inseri está dentro do linhas e colunas estabelecida na instanciação do tabuleiro
         public bool posicaoValida(Posicao pos)         
         {
