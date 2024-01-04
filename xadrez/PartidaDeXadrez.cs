@@ -1,18 +1,15 @@
 ﻿using xadrez_console.tabuleiro;
 using System;
 
-namespace xadrez_console.xadrez
-{
-    internal class PartidaDeXadrez
-    {
+namespace xadrez_console.xadrez {
+    internal class PartidaDeXadrez {
 
-        public Tabuleiro tab{ get; private set; }
-        private int turno;
-        private Cor jogadorAtual;
+        public Tabuleiro tab { get; private set; }
+        public int turno { get; private set; }
+        public Cor jogadorAtual { get; private set; }
         public bool terminada { get; private set; }
 
-        public PartidaDeXadrez()
-        {
+        public PartidaDeXadrez() {
             tab = new Tabuleiro(8, 8);
             turno = 1;
             terminada = false;
@@ -20,16 +17,47 @@ namespace xadrez_console.xadrez
             colocarPecas();
         }
 
-        public void executaMovimento(Posicao origem, Posicao destino)
-        {
+        public void executaMovimento(Posicao origem, Posicao destino) {
             Peca p = tab.retirarPeca(origem);
             p.incrementarQteMovimentos();
             Peca pecaCapturada = tab.retirarPeca(destino);
             tab.colocarPeca(p, destino);
         }
 
-        private void colocarPecas()
-        {
+        public void realizaJogada(Posicao origem, Posicao destino) {
+            executaMovimento(origem, destino);
+            turno++;
+            mudaJogador();
+        }
+
+        public void validarPosicaoDeOrigem(Posicao origem) {
+            if(tab.peca(origem) == null) {
+                throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+            }
+            if(jogadorAtual != tab.peca(origem).cor) {
+                throw new TabuleiroException("A peça escolhida não é sua!");
+            }
+            if (!tab.peca(origem).existeMovimentosPossiveis()) {
+                throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida!");
+            }
+        }
+
+        public void validarPosicaoDeDestino(Posicao origem, Posicao destino) {
+            if (!tab.peca(origem).podeMoverPara(destino)) {
+                throw new TabuleiroException("Posição de destino inválida!");
+            }
+        }
+
+        private void mudaJogador() {
+            if (jogadorAtual == Cor.Branca) {
+                jogadorAtual = Cor.Preta;
+            }
+            else {
+                jogadorAtual = Cor.Branca;
+            }
+        }
+
+        private void colocarPecas() {
             tab.colocarPeca(new Torre(tab, Cor.Branca), new PosicaoXadrez('c', 1).toPosicao());
             tab.colocarPeca(new Torre(tab, Cor.Branca), new PosicaoXadrez('c', 2).toPosicao());
             tab.colocarPeca(new Torre(tab, Cor.Branca), new PosicaoXadrez('d', 2).toPosicao());
