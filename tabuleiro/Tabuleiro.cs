@@ -1,4 +1,5 @@
-﻿using System;
+﻿using xadrez_console.xadrez;
+using System;
 
 namespace xadrez_console.tabuleiro
 {
@@ -35,7 +36,7 @@ namespace xadrez_console.tabuleiro
         {
             if (existePeca(pos))
             {
-                throw new TabuleiroException("Já existe uma peça nessa posição: " + pos);
+                throw new TabuleiroException("Já existe uma peça nessa posição!" );
             }
             pecas[pos.linha, pos.coluna] = p;
             p.posicao = pos;

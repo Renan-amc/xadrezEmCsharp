@@ -60,8 +60,13 @@ namespace xadrez_console.xadrez {
                 xeque = false;
             }
 
-            turno++;
-            mudaJogador();
+            if (testeXequeMate(adversaria(jogadorAtual))) {
+                terminada = true;
+            }
+            else {
+                turno++;
+                mudaJogador();
+            }
         }
 
         public void validarPosicaoDeOrigem(Posicao origem) {
@@ -123,6 +128,7 @@ namespace xadrez_console.xadrez {
             }
         }
 
+
         private Peca rei(Cor cor) {
             foreach(Peca x in pecasEmJogo(cor)) {
                 if (x is Rei)
@@ -142,10 +148,45 @@ namespace xadrez_console.xadrez {
                 bool[,] mat = x.movimentosPossiveis();
                 // Se na matriz de movimentos da peça adversária x na posição onde está o rei significa que esta peça está e xeque
                 if (mat[R.posicao.linha, R.posicao.coluna]) {
+                    //se na pos que o rei tá na matriz de movimentos do adversária estiver aquela pos como verdadeira será possivel comer a peça R logo aquela cor está em xeque!
                     return true; 
                 }
             }
             return false;
+        }
+
+        public bool testeXequeMate(Cor cor) {
+            if (!estaEmXeque(cor)) {
+                return false;
+            }
+            foreach(Peca x in pecasEmJogo(cor)) {
+                bool[,] mat = x.movimentosPossiveis();
+                // gera uma matriz com todos os movimentos possiveis da peça da cor escolhida
+                for(int i = 0; i < tab.linhas; i++) {
+                    for(int j = 0; j < tab.colunas; j++) {
+                // percorre as linhas e colunas daquela tabela que foi criada
+                        if (mat[i, j]) {
+                // se na pos [x][y] da minha matriz booleana for verdadeira eu entro no if
+                            Posicao origem = x.posicao;
+                // pega uma peça x da lista pecas em jogo armazena a posicao dela nql instante
+                            Posicao destino = new Posicao(i, j);
+                // diz que a posicao da peca em jogo daquela cor vai ir pra posicao i, j ex: [0][1] do tab. 
+                            Peca pecaCapturada = executaMovimento(origem, destino);
+                // chama a func executaMovimento, armazenando a pecaCapturada
+                            bool testeXeque = estaEmXeque(cor);
+                // chama func estaEmXeque e armazena o valor
+                // ele vai executar o movimento pra todas as posições possiveis pra todos as peças daquela cor e vai testar se quando faz o movimento a peça Rei fica em Xeque e armazena esse valor booleano;
+                            desfazMovimento(origem, destino, pecaCapturada);
+                // apos de verificar desfaz o movimento chamando a funcao
+                            if(!testeXeque) {
+                                return false;
+                            }
+                // se eu passar por todas as peças executar todos mov possiveis e se nenhum movimento foi tirado do xeque eu vou pular o if e entrar no return abaixo retornando um xequemate verdadiero.
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         public void colocarNovaPeca(char coluna, int linha, Peca peca) {
@@ -155,18 +196,12 @@ namespace xadrez_console.xadrez {
 
         private void colocarPecas() {
             colocarNovaPeca('c', 1, new Torre(tab, Cor.Branca));
-            colocarNovaPeca('c', 2, new Torre(tab, Cor.Branca));
-            colocarNovaPeca('d', 2, new Torre(tab, Cor.Branca));
-            colocarNovaPeca('e', 2, new Torre(tab, Cor.Branca));
-            colocarNovaPeca('e', 1, new Torre(tab, Cor.Branca));
+            colocarNovaPeca('b', 1, new Torre(tab, Cor.Branca));
             colocarNovaPeca('d', 1, new Rei(tab, Cor.Branca));
 
-            colocarNovaPeca('c', 7, new Torre(tab, Cor.Preta));
+            colocarNovaPeca('b', 8, new Torre(tab, Cor.Preta));
             colocarNovaPeca('c', 8, new Torre(tab, Cor.Preta));
-            colocarNovaPeca('d', 7, new Torre(tab, Cor.Preta));
-            colocarNovaPeca('e', 7, new Torre(tab, Cor.Preta));
-            colocarNovaPeca('e', 8, new Torre(tab, Cor.Preta));
-            colocarNovaPeca('d', 8, new Rei(tab, Cor.Preta));
+            colocarNovaPeca('a', 8, new Rei(tab, Cor.Preta));
                        
         }
 

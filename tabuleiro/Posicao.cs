@@ -25,6 +25,6 @@ namespace xadrez_console.tabuleiro
             this.linha = linha;
             this.coluna = coluna;
         }
-
+        
     }
 }
