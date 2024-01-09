@@ -26,7 +26,7 @@ namespace xadrez_console.xadrez {
                 if (tab.peca(pos) != null && tab.peca(pos).cor != cor) {
                     break;
                 }
-                pos.linha = pos.linha - 1;
+                pos.definirValores(pos.linha - 1, pos.coluna);
             }
 
             // abaixo
@@ -36,7 +36,7 @@ namespace xadrez_console.xadrez {
                 if (tab.peca(pos) != null && tab.peca(pos).cor != cor) {
                     break;
                 }
-                pos.linha = pos.linha + 1;
+                pos.definirValores(pos.linha + 1, pos.coluna);
             }
 
             // direita
@@ -46,7 +46,7 @@ namespace xadrez_console.xadrez {
                 if (tab.peca(pos) != null && tab.peca(pos).cor != cor) {
                     break;
                 }
-                pos.coluna = pos.coluna + 1;
+                pos.definirValores(pos.linha, pos.coluna + 1);
             }
 
             // esquerda
@@ -56,7 +56,7 @@ namespace xadrez_console.xadrez {
                 if (tab.peca(pos) != null && tab.peca(pos).cor != cor) {
                     break;
                 }
-                pos.coluna = pos.coluna - 1;
+                pos.definirValores(pos.linha, pos.coluna - 1);
             }
 
             // NO

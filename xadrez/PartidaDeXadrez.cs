@@ -162,14 +162,19 @@ namespace xadrez_console.xadrez {
         }
 
         public void validarPosicaoDeOrigem(Posicao origem) {
-            if(tab.peca(origem) == null) {
-                throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+            if (tab.posicaoValida(origem)) {
+                if (tab.peca(origem) == null) {
+                    throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+                }
+                if (jogadorAtual != tab.peca(origem).cor) {
+                    throw new TabuleiroException("A peça escolhida não é sua!");
+                }
+                if (!tab.peca(origem).existeMovimentosPossiveis()) {
+                    throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida!");
+                }
             }
-            if(jogadorAtual != tab.peca(origem).cor) {
-                throw new TabuleiroException("A peça escolhida não é sua!");
-            }
-            if (!tab.peca(origem).existeMovimentosPossiveis()) {
-                throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida!");
+            else {
+                tab.validarPosicao(origem);
             }
         }
 
